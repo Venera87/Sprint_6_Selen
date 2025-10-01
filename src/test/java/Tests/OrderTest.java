@@ -2,13 +2,24 @@ package Tests;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import pages.MainPage;
 import pages.OrderPage;
 
+import java.util.stream.Stream;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class OrderTest extends TestBase {
+
+    // Данные для параметризации — теперь локальные в этом классе
+    static Stream<Arguments> getOrderData() {
+        return Stream.of(
+                Arguments.of("Артём", "Сидоров", "Бауманская, 15", "89001234567", "25", "Привезти после 18:00"),
+                Arguments.of("Мария", "Кузнецова", "Ленинский проспект, 50", "89876543210", "30", "Оставить у двери")
+        );
+    }
 
     @ParameterizedTest
     @MethodSource("getOrderData")

@@ -11,19 +11,9 @@ public class MainPage {
     private final WebDriver driver;
     private final WebDriverWait wait;
 
-    // === Элементы главной страницы ===
-
-    // Кнопка "Заказать" в шапке
-    // Локатор: .Button_Button__ra12g (первая на странице)
     private final By orderButtonHeader = By.xpath("(//button[contains(@class, 'Button_Button')])[1]");
-
-    // Кнопка "Заказать" внизу (в блоке "Как это работает")
-    // Локатор: последняя кнопка с таким классом
     private final By orderButtonBottom = By.xpath("(//button[contains(@class, 'Button_Button')])[last()]");
-
-    // Вопросы в разделе "Вопросы о важном"
-    // Общий шаблон: //div[@id='accordion__heading-{index}']
-    // Ответы: //div[@id='accordion__panel-{index}']
+    private final By cookieButton = By.id("rcc-confirm-button");
 
     public MainPage(WebDriver driver) {
         this.driver = driver;
@@ -32,23 +22,25 @@ public class MainPage {
 
     public void open() {
         driver.get("https://qa-scooter.praktikum-services.ru/");
-        // Закрыть куки, если есть
+        // Закрыть куки, если появляется
         try {
-            driver.findElement(By.id("rcc-confirm-button")).click();
-        } catch (Exception ignored) {}
+            wait.until(ExpectedConditions.elementToBeClickable(cookieButton)).click();
+        } catch (Exception ignored) {
+            // Если кнопка куки не появилась — игнорируем
+        }
     }
 
     public void clickOrderButtonHeader() {
-        driver.findElement(orderButtonHeader).click();
+        wait.until(ExpectedConditions.elementToBeClickable(orderButtonHeader)).click();
     }
 
     public void clickOrderButtonBottom() {
-        driver.findElement(orderButtonBottom).click();
+        wait.until(ExpectedConditions.elementToBeClickable(orderButtonBottom)).click();
     }
 
     public void clickQuestion(int index) {
         By question = By.id("accordion__heading-" + index);
-        driver.findElement(question).click();
+        wait.until(ExpectedConditions.elementToBeClickable(question)).click();
     }
 
     public String getAnswerText(int index) {
